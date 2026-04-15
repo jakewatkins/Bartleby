@@ -1,0 +1,87 @@
+/* Bartleby Plugin Styles */
+
+/* Character limit marker styling */
+.bartleby-marker {
+	background-color: rgba(255, 107, 107, 0.2);
+	border-radius: 2px;
+	padding: 0 2px;
+	font-weight: bold;
+	transition: all 0.2s ease;
+}
+
+.bartleby-marker:hover {
+	background-color: rgba(255, 107, 107, 0.3);
+}
+
+/* Status bar counter styling */
+.bartleby-status {
+	font-size: 12px;
+	padding: 2px 6px;
+	border-radius: 3px;
+	transition: color 0.2s ease;
+}
+
+/* Character count color coding */
+.bartleby-counter-green {
+	color: var(--text-success);
+}
+
+.bartleby-counter-yellow {
+	color: var(--text-warning);
+}
+
+.bartleby-counter-red {
+	color: var(--text-error);
+	font-weight: 500;
+}
+
+/* URL highlighting (optional future feature) */
+.bartleby-url-detected {
+	background-color: rgba(100, 149, 237, 0.1);
+	border-bottom: 1px dotted var(--text-accent);
+}
+
+/* Settings panel styling */
+.bartleby-setting-description {
+	color: var(--text-muted);
+	font-size: 0.875em;
+	margin-top: 4px;
+}
+
+/* Make marker more visible in dark themes */
+.theme-dark .bartleby-marker {
+	background-color: rgba(255, 107, 107, 0.3);
+	color: #ff8a8a;
+}
+
+/* Accessibility: High contrast mode support */
+@media (prefers-contrast: high) {
+	.bartleby-marker {
+		background-color: var(--text-error);
+		color: var(--background-primary);
+		font-weight: bold;
+	}
+	
+	.bartleby-counter-green {
+		color: var(--text-success);
+		font-weight: 600;
+	}
+	
+	.bartleby-counter-yellow {
+		color: var(--text-warning);
+		font-weight: 600;
+	}
+	
+	.bartleby-counter-red {
+		color: var(--text-error);
+		font-weight: 600;
+	}
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+	.bartleby-status {
+		font-size: 11px;
+		padding: 1px 4px;
+	}
+}

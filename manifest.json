@@ -1,0 +1,11 @@
+{
+	"id": "bartleby-x-post-editor",
+	"name": "Bartleby",
+	"version": "1.0.0",
+	"minAppVersion": "1.0.0",
+	"description": "X (Twitter) post editor with character limit indicator and smart character counting.",
+	"author": "Jake Watkins",
+	"authorUrl": "",
+	"fundingUrl": "",
+	"isDesktopOnly": false
+}
