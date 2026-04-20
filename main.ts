@@ -31,6 +31,7 @@ export default class BartlebyPlugin extends Plugin {
 	activeEditor: Editor | null = null;
 	markerWidget: HTMLElement | null = null;
 	lastContent: string = '';
+	activeFilePath: string | null = null;
 
 	// URL detection regex - matches various URL formats
 	private readonly urlRegex = /(https?:\/\/[^\s]+|www\.[^\s]+|[a-zA-Z0-9]+\.[a-zA-Z]{2,}[^\s]*)/g;
@@ -54,11 +55,36 @@ export default class BartlebyPlugin extends Plugin {
 
 		this.registerEvent(
 			this.app.workspace.on('editor-change', (editor: Editor) => {
-				if (this.settings.enabled && editor === this.activeEditor) {
+				const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+				const filePath = view?.file?.path ?? null;
+				if (this.settings.enabled && this.activeFilePath !== null && this.activeFilePath === filePath && editor === this.activeEditor) {
 					this.debouncedUpdateCharacterCount();
 				}
 			})
 		);
+
+		// Command palette toggle
+		this.addCommand({
+			id: 'bartleby-toggle',
+			name: 'Toggle for this note',
+			callback: () => {
+				const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+				if (!view) return;
+
+				const filePath = view.file?.path ?? null;
+				if (this.activeFilePath === filePath) {
+					// Deactivate
+					this.activeFilePath = null;
+					this.removeMarker();
+					this.updateStatusBar(null);
+				} else {
+					// Activate on this note
+					this.activeFilePath = filePath;
+					this.activeEditor = view.editor;
+					this.debouncedUpdateCharacterCount();
+				}
+			}
+		});
 
 		// Initialize with current editor
 		this.updateActiveEditor();
@@ -87,7 +113,13 @@ export default class BartlebyPlugin extends Plugin {
 		const activeView = this.app.workspace.getActiveViewOfType(MarkdownView);
 		if (activeView) {
 			this.activeEditor = activeView.editor;
-			this.debouncedUpdateCharacterCount();
+			// Only run if this is the note the user activated Bartleby on
+			if (this.activeFilePath === (activeView.file?.path ?? null)) {
+				this.debouncedUpdateCharacterCount();
+			} else {
+				this.removeMarker();
+				this.updateStatusBar(null);
+			}
 		} else {
 			this.activeEditor = null;
 			this.removeMarker();
